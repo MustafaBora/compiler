@@ -20,7 +20,6 @@ public class Submission {
 
     @ManyToOne
     @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "fk_submission_task"))
-
     private Task task;
 
 

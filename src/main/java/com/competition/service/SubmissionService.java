@@ -27,4 +27,5 @@ public class SubmissionService {
     public List<Submission> findAll() {
         return repository.findAll();
     }
+
 }

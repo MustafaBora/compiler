@@ -34,7 +34,7 @@ public class SubmissionController {
         return  service.first3SortedByResult();
     }
 
-    public void checkCompiler() {
+    public void check() {
     }
 
     public static void main(String args[]) {

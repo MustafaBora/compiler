@@ -18,5 +18,4 @@ public class Task {
 
     @Column(name = "input_parameter")
     private String inputParameter;
-
 }
