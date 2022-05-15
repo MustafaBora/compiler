@@ -4,12 +4,13 @@ import lombok.Data;
 
 @Data
 public class Code {
-    String clientId = "cf4974ccb98c12d7d4fe93eb07d29f0b"; //Replace with your client ID
-    String clientSecret = "fa50da80bc0c27e805ecabb6b759885b88dfe8b591ba55c02f4d4f28e94360c1"; //Replace with your client Secret
-    String script = "public class MyClass { public static void main(String args[])" +
-            " { int x=10; System.out.println(\"Sum of x = \" + x); } }";
 
-    String language = "java";
-    String stdin = "";
-    String versionIndex = "3";
+    final String clientId = "cf4974ccb98c12d7d4fe93eb07d29f0b"; //Replace with your client ID
+    final String clientSecret = "fa50da80bc0c27e805ecabb6b759885b88dfe8b591ba55c02f4d4f28e94360c1"; //Replace with your client Secret
+
+    final String name;
+    final String script;// = "public class MyClass { public static void main(String args[]) { int x=10; System.out.println(\"Sum of x = \" + x); } }";
+    final String language;// = "java";
+    final String stdin;// = "";
+    final String versionIndex;// = "3";
 }

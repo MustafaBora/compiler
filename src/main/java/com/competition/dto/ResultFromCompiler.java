@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public class ResultFromCompiler {
 
     String output;
-    HttpStatus statusCode;
+    Integer statusCode;
     String memory;
-    Long cpuTime;
+    String cpuTime;
 }
