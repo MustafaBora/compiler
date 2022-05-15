@@ -21,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class SubmissionService {
 */
 
 
-    public void submitCode(Code code) {
+    public Long submitCode(Code code) {
 
         try {
         /*    URL url = new URL("https://api.jdoodle.com/v1/execute");
@@ -129,15 +130,40 @@ public class SubmissionService {
             HttpEntity<Code> request = new HttpEntity<>(code);
 
             LinkedHashMap<String, Object> returnValue = restTemplate.postForObject(JDOODLE_API, request, LinkedHashMap.class);
-            if(returnValue == null) return;
+            ResultFromCompiler resultFromCompiler = restTemplate.postForObject(JDOODLE_API, request, ResultFromCompiler.class);
+            if(returnValue == null) return null;
+            Submission submission = Submission.builder()
+                    .output(resultFromCompiler.getOutput())
+                    .statusCode(resultFromCompiler.getStatusCode())
+                    .memory(resultFromCompiler.getMemory())
+                    .cpuTime(resultFromCompiler.getCpuTime())
+                    .name(code.getName())
+                    .script(code.getScript())
+                    .language(code.getLanguage())
+                    .stdin(code.getStdin())
+                    .versionIndex(code.getVersionIndex())
+                    .task(null)
+                    .result("not yet")
+
+                    .build();
+            /*Submission submission = new Submission(code, resultFromCompiler);
+            submission.setName(code.getName());
+            submission.setTask(null);
+            submission.setScript(code.getScript());
+            submission.setLanguage(code.getLanguage());
+            submission.setOutput((String) returnValue.get("output"));
+            submission.setStatusCode((Integer) returnValue.get("statusCode"));
+            submission.setMemory((String) returnValue.get("memory"));
+            submission.setCpuTime((String) returnValue.get("cpuTime"));
+            submission.setResult("dunno yet");
             System.out.println(returnValue.get("output"));
             System.out.println(returnValue.get("statusCode"));
             System.out.println(returnValue.get("memory"));
             System.out.println(returnValue.get("cpuTime"));
+            System.out.println(new Date());*/
 
-
-
-
+            repository.save(submission);
+            return submission.getId();
             /*System.out.println(input);
 
             OutputStream outputStream = connection.getOutputStream();
@@ -167,6 +193,7 @@ public class SubmissionService {
         }*/
         } catch (RestClientException rce) {
             rce.printStackTrace();
+            return null;
         }
     }
 
