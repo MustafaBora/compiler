@@ -1,15 +1,16 @@
 package com.competition.entity;
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "task", schema = "competition")
+@Table(schema = "competition")
 @Entity
-@Data
+@Getter
 public class Task {
 
     @Id

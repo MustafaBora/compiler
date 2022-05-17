@@ -1,18 +1,15 @@
 package com.competition.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "submission", schema = "competition")
-@Data
+@Table(schema = "competition")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Submission {
 
     @Id
@@ -20,7 +17,7 @@ public class Submission {
     @Column(nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column( nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)

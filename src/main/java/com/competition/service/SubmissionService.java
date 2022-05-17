@@ -69,7 +69,7 @@ public class SubmissionService {
                 .stdin(code.getStdin())
                 .versionIndex(code.getVersionIndex())
                 .task(taskService.findTaskByName(code.getTask()))
-                .result("not yet decided")
+                .result(resultFromCompiler.getMemory()) // memory defines success!
                 .build();
 
             repository.save(submission);
