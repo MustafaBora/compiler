@@ -2,9 +2,6 @@ package com.competition.service;
 
 import com.competition.entity.Task;
 import com.competition.repository.TaskRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +17,14 @@ public class TaskService {
 
     public List<Task> findAll() {
         return repository.findAll();
+    }
+
+    public Task findTaskByName(String name) {
+        List<Task> byName = repository.findByName(name);
+        if(byName != null && !byName.isEmpty()) {
+            return byName.get(0);
+        }
+        return null;
     }
 
 }

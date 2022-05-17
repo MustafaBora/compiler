@@ -1,11 +1,13 @@
 package com.competition.controller;
 
 import com.competition.dto.Code;
-import com.competition.entity.Submission;
+import com.competition.dto.CodeJDoodle;
+import com.competition.dto.Place;
 import com.competition.service.SubmissionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -18,14 +20,15 @@ public class SubmissionController {
 
     private final SubmissionService service;
 
-
     public SubmissionController(SubmissionService service) {
         this.service = service;
     }
 
     @GetMapping()
-    public List<Submission> first3SortedByResult() {
-        return service.first3SortedByResult();
+    public List<Place> first3SortedByResult() {
+        return service.first3SortedByResult().stream().map((submission) ->
+                new Place(submission.getName(), submission.getScript().substring(0, 100), submission.getTask().getName()))
+            .collect(Collectors.toList());
     }
 
     @PostMapping

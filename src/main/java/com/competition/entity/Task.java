@@ -1,5 +1,7 @@
 package com.competition.entity;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,15 +9,17 @@ import javax.persistence.Table;
 
 @Table(name = "task", schema = "competition")
 @Entity
+@Data
 public class Task {
 
     @Id
-    @Column(name = "id")
+    @Column
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(name = "input_parameter")
-    private String inputParameter;
+    @Column()
+    private String description;
+
 }

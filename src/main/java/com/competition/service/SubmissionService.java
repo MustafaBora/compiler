@@ -1,6 +1,7 @@
 package com.competition.service;
 
 import com.competition.dto.Code;
+import com.competition.dto.CodeJDoodle;
 import com.competition.dto.ResultFromCompiler;
 import com.competition.entity.Submission;
 import com.competition.repository.SubmissionRepository;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,8 +32,11 @@ public class SubmissionService {
 
     private final SubmissionRepository repository;
 
-    public SubmissionService(SubmissionRepository repository) {
+    private final TaskService taskService;
+
+    public SubmissionService(SubmissionRepository repository, TaskService taskService) {
         this.repository = repository;
+        this.taskService = taskService;
     }
 
     public List<Submission> first3SortedByResult() {
@@ -41,26 +47,30 @@ public class SubmissionService {
 
     public Long submitCode(Code code) {
         try {
-
+            CodeJDoodle codeJDoodle = new CodeJDoodle(code);
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpEntity<Code> request = new HttpEntity<>(code);
+            // Create the request body as a MultiValueMap
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 
+            headers.add("user-agent", "Application");
+
+            HttpEntity<CodeJDoodle> request = new HttpEntity<>(codeJDoodle, headers);
             ResultFromCompiler resultFromCompiler = restTemplate.postForObject(JDOODLE_API, request, ResultFromCompiler.class);
             if(resultFromCompiler == null) return null;
             Submission submission = Submission.builder()
-                    .output(resultFromCompiler.getOutput())
-                    .statusCode(resultFromCompiler.getStatusCode())
-                    .memory(resultFromCompiler.getMemory())
-                    .cpuTime(resultFromCompiler.getCpuTime())
-                    .name(code.getName())
-                    .script(code.getScript())
-                    .language(code.getLanguage())
-                    .stdin(code.getStdin())
-                    .versionIndex(code.getVersionIndex())
-                    .task(null)
-                    .result("not yet decided")
-                    .build();
+                .output(resultFromCompiler.getOutput())
+                .statusCode(resultFromCompiler.getStatusCode())
+                .memory(resultFromCompiler.getMemory())
+                .cpuTime(resultFromCompiler.getCpuTime())
+                .name(code.getName())
+                .script(code.getScript())
+                .language(code.getLanguage())
+                .stdin(code.getStdin())
+                .versionIndex(code.getVersionIndex())
+                .task(taskService.findTaskByName(code.getTask()))
+                .result("not yet decided")
+                .build();
 
             repository.save(submission);
 
