@@ -27,7 +27,9 @@ public class SubmissionController {
     @GetMapping()
     public List<Place> first3SortedByResult() {
         return service.first3SortedByResult().stream().map((submission) ->
-                new Place(submission.getName(), submission.getScript().substring(0, 100), submission.getTask().getName()))
+                new Place(submission.getName(),
+                        submission.getScript().substring(0, submission.getScript().length() < 100 ? submission.getScript().length() : 100),
+                        submission.getTask().getName()))
             .collect(Collectors.toList());
     }
 
